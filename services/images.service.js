@@ -5,12 +5,12 @@ class ImageService {
 
   async create(data) {
     try {
-      const { category, url } = data;
+      const { categories, url } = data;
       const newImage = new Image();
-      if (!category || !url) {
+      if (!categories || !url) {
         throw { msg: 'miss data' };
       }
-      newImage.category = category;
+      newImage.categories = categories;
       newImage.url = url;
       newImage.save();
 
@@ -22,7 +22,7 @@ class ImageService {
 
   async findOne(id) {
     try {
-      const image = await Image.findOne(id);
+      const image = await Image.findOne(id).populate('categories', { name: 1 });
       if (!image) {
         throw { msg: 'miss data' };
       }
@@ -34,7 +34,7 @@ class ImageService {
 
   async find() {
     try {
-      const images = Image.find({});
+      const images = Image.find({}).populate('categories', { name: 1 });
       return images;
     } catch (error) {
       throw error;

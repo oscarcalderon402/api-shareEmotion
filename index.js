@@ -2,14 +2,32 @@ const express = require('express');
 const apiRouter = require('./routes');
 const db = require('./lib/mongoose');
 
+const path = require('path');
 const app = express();
 const port = 3000;
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 app.use(express.json());
-app.get('/', (req, res) => {
-  res.send('hello');
-});
+// app.get('/', (req, res) => {
+//   res.send('hello');
+// });
 db();
 apiRouter(app);
+
+app.post('/profile', upload.single('avatar'), function (req, res, next) {
+  // req.file is the `avatar` file
+  // req.body will hold the text fields, if there were any
+  console.log(req.file);
+
+  res.send('listo');
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
 app.listen(port, () => {
   console.log(`listen in port ${port}`);
 });

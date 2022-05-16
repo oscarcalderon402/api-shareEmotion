@@ -4,9 +4,9 @@ const { Schema } = mongoose;
 
 const imageSchema = new Schema(
   {
-    category: {
+    categories: {
       type: Array,
-      default: []
+      ref: 'categories'
     },
     url: String
   },
