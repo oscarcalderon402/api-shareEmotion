@@ -8,6 +8,7 @@ const port = 3000;
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
+const uploadFile = require('./lib/s3');
 
 app.use(express.json());
 // app.get('/', (req, res) => {
@@ -20,7 +21,8 @@ app.post('/profile', upload.single('avatar'), function (req, res, next) {
   // req.file is the `avatar` file
   // req.body will hold the text fields, if there were any
   console.log(req.file);
-
+  const result = uploadFile(req.file);
+  console.log(result);
   res.send('listo');
 });
 
