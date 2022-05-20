@@ -8,8 +8,12 @@
   </head>
   <body>
     <style>
-      img {
-        margin-top: '50px';
+      .container {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        height: 300px;
+        width: 300px;
       }
     </style>
     <h1>hello worl</h1>
@@ -23,6 +27,8 @@
       <input id="imageInput" type="file" accept="image/*" name="avatar" />
       <button type="submit">Upload</button>
     </form>
-    <img src="images/s3/83ed2eab279a9990e58cc0cf0a28977a" />
+    <div class="container">
+      <img class="image" src="images/s3/83ed2eab279a9990e58cc0cf0a28977a" />
+    </div>
   </body>
 </html>
