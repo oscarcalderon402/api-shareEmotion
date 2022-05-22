@@ -9,7 +9,7 @@ const port = 3000;
 const {
   logErrors,
   errorHandler,
-  boomErrorHandler
+  boomErrorHandler,
 } = require('./middleware/error.handler');
 
 app.use(express.json());
@@ -25,6 +25,7 @@ app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });

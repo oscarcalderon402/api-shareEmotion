@@ -1,18 +1,28 @@
 const Image = require('../db/images.model');
+const path = require('path');
+const boom = require('@hapi/boom');
+const deleteFile = require('../utils/deleteFile');
 
 class ImageService {
   constructor() {}
 
   async create(data) {
     try {
-      const { categories, url } = data;
+      const { categories, key } = data;
       const newImage = new Image();
-      if (!categories || !url) {
-        throw { msg: 'miss data' };
+      if (!categories || !key) {
+        throw boom.badRequest('missed data');
       }
       newImage.categories = categories;
-      newImage.url = url;
-      newImage.save();
+      newImage.key = key;
+      await newImage.save();
+
+      if (newImage) {
+        setTimeout(
+          () => deleteFile(path.join(__dirname, '..', 'uploads', key)),
+          4000
+        );
+      }
 
       return newImage;
     } catch (error) {
@@ -24,7 +34,7 @@ class ImageService {
     try {
       const image = await Image.findOne(id).populate('categories', { name: 1 });
       if (!image) {
-        throw { msg: 'miss data' };
+        throw boom.badRequest('missed data');
       }
       return image;
     } catch (error) {

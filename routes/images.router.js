@@ -12,49 +12,44 @@ router.get('/', async (req, res) => {
     const images = await service.find();
     res.json(images);
   } catch (error) {
-    res.json(error);
+    next(error);
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', upload.single('image'), async (req, res, next) => {
   try {
-    const body = req.body;
+    const result = await uploadFile(req.file);
+
+    const data = JSON.parse(JSON.stringify(req.body));
+    const body = JSON.parse(data.body);
+    body.key = result.Key;
+
     const newImage = await service.create(body);
+
     res.status(201).json(newImage);
   } catch (error) {
-    res.json(error);
+    next(error);
   }
 });
 
-router.post('/test', upload.single('image'), async (req, res) => {
-  try {
-    console.log(req.file);
-    const result = uploadFile(req.file);
-    console.log(result);
-    res.status(201);
-  } catch (error) {
-    res.json(error);
-  }
-});
-
-router.get('/s3/:key', upload.single('image'), async (req, res) => {
+router.get('/s3/:key', upload.single('image'), async (req, res, next) => {
   try {
     const { key } = req.params;
     const readStream = getFileStream(key);
     readStream.pipe(res);
     res.status(201);
   } catch (error) {
-    res.json(error);
+    next(error);
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const image = await service.findOne(id);
     res.json(image);
   } catch (error) {
-    res.json(error);
+    next(error);
   }
 });
 

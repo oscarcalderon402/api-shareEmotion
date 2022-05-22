@@ -21,7 +21,7 @@ class UserService {
       newUsers.email = email;
       newUsers.password = hash;
 
-      newUsers.save();
+      await newUsers.save();
       newUsers.password = undefined;
       return newUsers;
     } catch (error) {
@@ -36,7 +36,7 @@ class UserService {
       if (!users) {
         throw boom.unauthorized('user not found');
       }
-      return Users;
+      return users;
     } catch (error) {
       throw error;
     }
@@ -44,7 +44,7 @@ class UserService {
 
   async find() {
     try {
-      const users = await Users.find({});
+      const users = await Users.find({}, { password: 0 });
       return users;
     } catch (error) {
       throw error;
@@ -65,7 +65,7 @@ class UserService {
 
   async deleteOne(id) {
     try {
-      const users = await Users.deleteOne({ _id: id });
+      await Users.deleteOne({ _id: id });
       return id;
     } catch (error) {
       throw error;

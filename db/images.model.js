@@ -4,14 +4,17 @@ const { Schema } = mongoose;
 
 const imageSchema = new Schema(
   {
+    name: {
+      type: String,
+    },
     categories: {
       type: Array,
-      ref: 'categories'
+      ref: 'categories',
     },
-    url: String
+    key: String,
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
