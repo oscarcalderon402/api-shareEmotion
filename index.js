@@ -5,11 +5,11 @@ const db = require('./lib/mongoose');
 const path = require('path');
 const app = express();
 const port = 3000;
-
+require('./utils/auth');
 const {
   logErrors,
   errorHandler,
-  boomErrorHandler,
+  boomErrorHandler
 } = require('./middleware/error.handler');
 
 app.use(express.json());

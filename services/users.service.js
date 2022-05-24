@@ -51,6 +51,15 @@ class UserService {
     }
   }
 
+  async findByEmail(email) {
+    try {
+      const user = await Users.findOne({ email });
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async update(id, name) {
     try {
       const userFound = await this.findOne(id);
