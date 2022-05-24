@@ -7,10 +7,8 @@ class UserService {
 
   async create(data) {
     try {
-      const { email, password } = data;
+      const { email, password, name, role } = data;
       const userFound = await Users.findOne({ email });
-      console.log(data);
-      console.log(userFound);
 
       if (userFound?.email === email) {
         throw boom.unauthorized('user exist');
@@ -18,7 +16,9 @@ class UserService {
       const hash = await bcrypt.hash(password, 10);
       const newUsers = new Users();
 
+      newUsers.name = name;
       newUsers.email = email;
+      newUsers.role = role;
       newUsers.password = hash;
 
       await newUsers.save();
