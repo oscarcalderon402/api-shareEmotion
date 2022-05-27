@@ -1,7 +1,7 @@
 const Image = require('../db/images.model');
 const path = require('path');
 const boom = require('@hapi/boom');
-const deleteFile = require('../utils/deleteFile');
+const deleteFile = require('../utils/scripts/deleteFile');
 
 class ImageService {
   constructor() {}
