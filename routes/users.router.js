@@ -9,7 +9,7 @@ const service = new User();
 router.get('/', async (req, res, next) => {
   try {
     const users = await service.find();
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
     res.json(error);
   }

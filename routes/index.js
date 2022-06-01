@@ -1,13 +1,16 @@
+const express = require('express');
 const imagesRouter = require('./images.router');
 const categoriesRouter = require('./categories.router');
 const usersRouter = require('./users.router');
 const authRouter = require('./auth.router');
 
 function apiRouter(app) {
-  app.use('/images', imagesRouter);
-  app.use('/categories', categoriesRouter);
-  app.use('/users', usersRouter);
-  app.use('/auth', authRouter);
+  const router = express.Router();
+  app.use('/api/v1', router);
+  router.use('/images', imagesRouter);
+  router.use('/categories', categoriesRouter);
+  router.use('/users', usersRouter);
+  router.use('/auth', authRouter);
 }
 
 module.exports = apiRouter;
