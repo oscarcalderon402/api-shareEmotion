@@ -1,4 +1,5 @@
 const Category = require('../db/categories.model');
+const boom = require('@hapi/boom');
 
 class CategoryService {
   constructor() {}
@@ -7,9 +8,7 @@ class CategoryService {
     try {
       const { name } = data;
       const newImage = new Category();
-      if (!name) {
-        throw { msg: 'miss data' };
-      }
+
       newImage.name = name;
 
       newImage.save();
@@ -24,7 +23,7 @@ class CategoryService {
     try {
       const category = await Category.findOne({ _id: id });
       if (!category) {
-        throw { msg: 'miss data' };
+        throw boom.notFound('Category not found');
       }
       return category;
     } catch (error) {
