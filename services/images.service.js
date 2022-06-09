@@ -8,11 +8,10 @@ class ImageService {
 
   async create(data) {
     try {
-      const { categories, key } = data;
+      const { name, categories, key } = data;
       const newImage = new Image();
-      if (!categories || !key) {
-        throw boom.badRequest('missed data');
-      }
+
+      newImage.name = name;
       newImage.categories = categories;
       newImage.key = key;
       await newImage.save();
@@ -34,7 +33,7 @@ class ImageService {
     try {
       const image = await Image.findOne(id).populate('categories', { name: 1 });
       if (!image) {
-        throw boom.badRequest('missed data');
+        throw boom.notFound('Image not found');
       }
       return image;
     } catch (error) {

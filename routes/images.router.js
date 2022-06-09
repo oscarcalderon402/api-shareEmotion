@@ -1,6 +1,13 @@
 const express = require('express');
 const Image = require('../services/images.service');
 
+const {
+  createImagesSchema,
+  updateImagesSchema,
+  getImagesSchema,
+} = require('./../schemas/images.schema');
+const validatorHandler = require('../middleware/validator.handler');
+
 const upload = require('../lib/multer');
 const { uploadFile, getFileStream } = require('../lib/s3');
 const router = express.Router();
@@ -16,21 +23,27 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', upload.single('image'), async (req, res, next) => {
-  try {
-    const result = await uploadFile(req.file);
+router.post(
+  '/',
+  validatorHandler(createImagesSchema, 'body', true),
+  upload.single('image'),
+  async (req, res, next) => {
+    try {
+      const result = await uploadFile(req.file);
 
-    const data = JSON.parse(JSON.stringify(req.body));
-    const body = JSON.parse(data.body);
-    body.key = result.Key;
+      const data = JSON.parse(JSON.stringify(req.body));
+      const body = JSON.parse(data.body);
 
-    const newImage = await service.create(body);
+      body.key = result.Key;
 
-    res.status(201).json(newImage);
-  } catch (error) {
-    next(error);
+      const newImage = await service.create(body);
+
+      res.status(201).json(newImage);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get('/s3/:key', upload.single('image'), async (req, res, next) => {
   try {
